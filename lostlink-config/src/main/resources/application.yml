@@ -1,0 +1,26 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: lostlink-config
+  cloud:
+    config:
+      server:
+        # For now, use a local file system as the config backend.
+        # In production, switch to a Git repository.
+        native:
+          search-locations: classpath:/config-repo/
+  profiles:
+    active: native
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+logging:
+  level:
+    org.springframework.cloud.config: DEBUG

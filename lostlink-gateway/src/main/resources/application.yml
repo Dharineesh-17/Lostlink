@@ -1,0 +1,48 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: lostlink-gateway
+  cloud:
+    gateway:
+      # ============================================================
+      # ROUTE DEFINITIONS
+      # Each route maps an incoming URL pattern to a microservice.
+      # The Gateway uses Eureka to resolve the actual host:port.
+      # ============================================================
+      routes:
+        - id: lostlink-service
+          uri: lb://lostlink-service  # "lb://" = load-balanced via Eureka
+          predicates:
+            - Path=/api/**            # Match all /api/ requests
+          filters:
+            - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials
+            - AddResponseHeader=X-Gateway, LostLink-Gateway
+
+      # Global CORS configuration
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins:
+              - "http://localhost:3000"
+              - "http://localhost:5173"
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowed-headers: "*"
+            allow-credentials: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG

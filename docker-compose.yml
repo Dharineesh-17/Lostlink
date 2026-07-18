@@ -1,0 +1,128 @@
+# ============================================================
+# LostLink — Docker Compose for Full Microservices Stack
+# ============================================================
+# Starts ALL services with a single command: docker-compose up
+# Includes: MySQL, Eureka, Config Server, Gateway, Core Service
+# ============================================================
+
+version: '3.8'
+
+services:
+  # ============================================================
+  # MySQL Database
+  # ============================================================
+  mysql:
+    image: mysql:8.0
+    container_name: lostlink-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: lostlink_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - lostlink-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ============================================================
+  # Eureka Discovery Server (Port 8761)
+  # ============================================================
+  eureka:
+    build:
+      context: ./lostlink-eureka
+      dockerfile: Dockerfile
+    container_name: lostlink-eureka
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=default
+    networks:
+      - lostlink-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  # ============================================================
+  # Config Server (Port 8888)
+  # ============================================================
+  config-server:
+    build:
+      context: ./lostlink-config
+      dockerfile: Dockerfile
+    container_name: lostlink-config
+    ports:
+      - "8888:8888"
+    networks:
+      - lostlink-network
+    depends_on:
+      - eureka
+
+  # ============================================================
+  # API Gateway (Port 8080)
+  # ============================================================
+  gateway:
+    build:
+      context: ./lostlink-gateway
+      dockerfile: Dockerfile
+    container_name: lostlink-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+    networks:
+      - lostlink-network
+    depends_on:
+      - eureka
+      - config-server
+
+  # ============================================================
+  # LostLink Core Service (Port 8081)
+  # ============================================================
+  lostlink-service:
+    build:
+      context: ./lostlink-service
+      dockerfile: Dockerfile
+    container_name: lostlink-service
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/lostlink_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka:8761/eureka/
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:8888
+      - SPRING_CLOUD_CONFIG_ENABLED=false
+    networks:
+      - lostlink-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+      eureka:
+        condition: service_started
+
+  # ============================================================
+  # React Frontend (Port 3000)
+  # ============================================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: lostlink-frontend
+    ports:
+      - "3000:3000"
+    networks:
+      - lostlink-network
+    depends_on:
+      - gateway
+
+networks:
+  lostlink-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

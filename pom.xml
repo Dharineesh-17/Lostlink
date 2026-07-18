@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        ============================================================
+        PARENT POM — LostLink Microservices Project
+        ============================================================
+        Why a parent POM?
+        - Centralizes dependency versions so every child module stays
+          in sync (no version conflicts).
+        - Defines the Spring Boot parent which provides curated
+          dependency management.
+        - Declares <modules> so Maven knows which sub-projects to
+          build when you run `mvn clean install` from the root.
+        ============================================================
+    -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.5</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.example</groupId>
+    <artifactId>lostlink</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>LostLink</name>
+    <description>Campus Lost and Found Management System - Microservices</description>
+
+    <!--
+        ============================================================
+        MODULES
+        Each module is an independently deployable Spring Boot app.
+        ============================================================
+    -->
+    <modules>
+        <module>lostlink-service</module>
+        <module>lostlink-eureka</module>
+        <module>lostlink-gateway</module>
+        <module>lostlink-config</module>
+    </modules>
+
+    <!--
+        ============================================================
+        PROPERTIES
+        Centralized version management — change once, affects all.
+        ============================================================
+    -->
+    <properties>
+        <java.version>21</java.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
+        <jjwt.version>0.12.5</jjwt.version>
+        <springdoc.version>2.5.0</springdoc.version>
+        <resilience4j.version>2.2.0</resilience4j.version>
+        <lombok.version>1.18.36</lombok.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <!--
+        ============================================================
+        DEPENDENCY MANAGEMENT
+        These versions are inherited by all child modules.
+        Child POMs just declare the <artifactId> — no version needed.
+        ============================================================
+    -->
+    <dependencyManagement>
+        <dependencies>
+            <!-- Spring Cloud BOM — manages all Spring Cloud artifact versions -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- JJWT (JSON Web Token) libraries -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jjwt.version}</version>
+            </dependency>
+
+            <!-- SpringDoc OpenAPI for Swagger UI -->
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
+            </dependency>
+
+            <!-- Resilience4j for circuit breaker -->
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot3</artifactId>
+                <version>${resilience4j.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <!--
+        ============================================================
+        BUILD CONFIGURATION
+        Java 21 compiler, standard Maven plugin versions.
+        ============================================================
+    -->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

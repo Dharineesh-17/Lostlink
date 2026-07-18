@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-900 font-sans;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-600 hover:bg-brand-700 text-white font-semibold py-2.5 px-6 rounded-xl 
+           transition-all duration-200 shadow-md shadow-brand-600/25 hover:shadow-lg hover:shadow-brand-600/30
+           active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+  }
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 text-gray-700 font-semibold py-2.5 px-6 rounded-xl 
+           border border-gray-200 transition-all duration-200 hover:border-gray-300 hover:shadow-sm
+           active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2;
+  }
+  .btn-danger {
+    @apply bg-red-500 hover:bg-red-600 text-white font-semibold py-2.5 px-6 rounded-xl 
+           transition-all duration-200 shadow-md shadow-red-500/25 hover:shadow-lg
+           active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  }
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6 transition-all duration-200;
+  }
+  .card-hover {
+    @apply card hover:shadow-md hover:border-brand-200 hover:-translate-y-0.5;
+  }
+  .input-field {
+    @apply w-full px-4 py-3 rounded-xl border border-gray-200 bg-white 
+           focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent 
+           placeholder-gray-400 text-sm transition-all duration-200;
+  }
+  .stat-card {
+    @apply bg-white rounded-2xl p-6 border border-gray-100 shadow-sm;
+  }
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold;
+  }
+  .badge-lost {
+    @apply badge bg-red-100 text-red-700;
+  }
+  .badge-found {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+  .badge-claimed {
+    @apply badge bg-amber-100 text-amber-700;
+  }
+  .badge-returned {
+    @apply badge bg-brand-100 text-brand-700;
+  }
+  .badge-pending {
+    @apply badge bg-amber-100 text-amber-700;
+  }
+  .badge-approved {
+    @apply badge bg-emerald-100 text-emerald-700;
+  }
+  .badge-rejected {
+    @apply badge bg-red-100 text-red-700;
+  }
+  .nav-link {
+    @apply text-gray-500 hover:text-brand-600 font-medium text-sm transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-brand-50;
+  }
+  .nav-link-active {
+    @apply text-brand-600 bg-brand-50 font-semibold text-sm px-3 py-2 rounded-lg;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* Gradient text utility */
+.gradient-text {
+  @apply bg-gradient-to-r from-brand-600 to-brand-400 bg-clip-text text-transparent;
+}

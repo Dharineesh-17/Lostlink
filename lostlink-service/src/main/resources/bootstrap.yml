@@ -1,0 +1,15 @@
+# ============================================================
+# Bootstrap Configuration — Runs BEFORE application.yml
+# ============================================================
+# This file connects to the Config Server to fetch additional
+# configuration. If the Config Server is down, the service
+# still starts with application.yml (graceful degradation).
+# ============================================================
+spring:
+  application:
+    name: lostlink-service
+  cloud:
+    config:
+      uri: http://localhost:8888
+      fail-fast: false     # Don't crash if Config Server is unavailable
+      enabled: false       # Set to true when Config Server is running

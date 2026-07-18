@@ -1,0 +1,90 @@
+# ============================================================
+# LostLink Service — Application Configuration
+# ============================================================
+# This is the MAIN configuration file for the LostLink core service.
+# It configures: server, database, JPA, JWT, Eureka, and logging.
+# ============================================================
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: lostlink-service
+  cloud:
+    compatibility-verifier:
+      enabled: false
+
+  # ============================================================
+  # DATABASE CONFIGURATION (H2 In-Memory)
+  # ============================================================
+  datasource:
+    url: jdbc:h2:mem:lostlink_db;DB_CLOSE_DELAY=-1;MODE=MySQL
+    username: sa
+    password: 
+    driver-class-name: org.h2.Driver
+
+  # ============================================================
+  # JPA / HIBERNATE CONFIGURATION
+  # ============================================================
+  jpa:
+    hibernate:
+      # ddl-auto: update — Hibernate automatically creates/updates
+      # tables based on entity classes. Safe for development.
+      # In production, use 'validate' or 'none' with Flyway migrations.
+      ddl-auto: update
+    show-sql: true          # Log SQL statements (useful for debugging)
+    properties:
+      hibernate:
+        format_sql: true    # Pretty-print SQL in logs
+        dialect: org.hibernate.dialect.H2Dialect
+
+  # ============================================================
+  # SERVLET CONFIGURATION
+  # ============================================================
+  servlet:
+    multipart:
+      max-file-size: 5MB    # Max upload file size
+      max-request-size: 10MB
+
+# ============================================================
+# EUREKA CLIENT CONFIGURATION
+# ============================================================
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+
+# ============================================================
+# JWT CONFIGURATION
+# ============================================================
+# The secret must be Base64-encoded and at least 256 bits (32 chars).
+# This is a DEV secret — in production, use environment variables!
+# Generate with: echo -n "my-super-secret-key-for-lostlink" | base64
+jwt:
+  secret: bXktc3VwZXItc2VjcmV0LWtleS1mb3ItbG9zdGxpbms=   # "my-super-secret-key-for-lostlink" base64
+  expiration: 86400000  # 24 hours in milliseconds
+
+# ============================================================
+# SWAGGER / OPENAPI CONFIGURATION
+# ============================================================
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+
+# ============================================================
+# LOGGING CONFIGURATION
+# ============================================================
+logging:
+  level:
+    com.example.lostlink: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG

@@ -1,0 +1,24 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: lostlink-eureka
+  cloud:
+    compatibility-verifier:
+      enabled: false
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    # A Eureka server should NOT register with itself
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+logging:
+  level:
+    com.netflix.eureka: INFO
+    com.netflix.discovery: INFO
