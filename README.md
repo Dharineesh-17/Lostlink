@@ -1,4 +1,4 @@
-# LostLink — Campus Lost & Found Management System
+# LostLink — Campus Lost & Found Management System.
 
 A production-grade, microservices-based campus lost-and-found platform built with **Spring Boot 3**, **Spring Cloud**, and **React**. Designed for Organisations to digitize the traditional notice-board process.
 
