@@ -22,7 +22,7 @@ A production-grade, microservices-based campus lost-and-found platform built wit
                     └───────────────────┘
                               │
                     ┌─────────▼─────────┐
-                    │  H2 Database   │
+                    │  H2 Database      │
                     │                   │
                     └───────────────────┘
 ```
