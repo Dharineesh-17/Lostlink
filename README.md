@@ -22,8 +22,8 @@ A production-grade, microservices-based campus lost-and-found platform built wit
                     └───────────────────┘
                               │
                     ┌─────────▼─────────┐
-                    │  MySQL Database   │
-                    │  (Port 3306)      │
+                    │  H2 Database   │
+                    │                   │
                     └───────────────────┘
 ```
 
@@ -105,8 +105,6 @@ LostLink/
 
 - **Java 21** (Eclipse Temurin recommended)
 - **Maven 3.9+**
-- **MySQL 8.0** (or use Docker)
-- **Node.js 20+** (for frontend)
 - **Docker & Docker Compose** (optional, for containerized deployment)
 
 ### Option 1: Run with Docker (Recommended)
